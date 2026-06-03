@@ -17,3 +17,38 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+/* Полное отключение outline для всех интерактивных элементов */
+* {
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+*:focus {
+  outline: none !important;
+}
+
+*:active {
+  outline: none !important;
+}
+
+/* Отключение outline для SVG элементов */
+svg {
+  outline: none !important;
+}
+
+svg * {
+  outline: none !important;
+}
+
+/* Отключение outline для Geography элементов */
+.rsm-geography {
+  outline: none !important;
+}
+
+.rsm-geography:focus {
+  outline: none !important;
+}
+
+.rsm-geography:active {
+  outline: none !important;
+}

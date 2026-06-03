@@ -4,7 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,28 +13,49 @@
 
 .splash-content {
   text-align: center;
-  color: white;
 }
 
 .splash-title {
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin-top: 30px;
-  font-weight: 600;
-  letter-spacing: -0.5px;
+  font-weight: 500;
+  color: #333333;
 }
 
 .splash-subtitle {
-  font-size: 1rem;
+  font-size: 0.9rem;
   margin-top: 10px;
-  opacity: 0.9;
+  color: #888888;
 }
 
 .loading-bar {
-  height: 3px;
-  background: white;
+  height: 2px;
+  background: #e8e8e8;
   margin-top: 40px;
-  border-radius: 3px;
+  border-radius: 2px;
   width: 200px;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: #007aff;
+  animation: loading 2.5s ease-in-out;
+}
+
+@keyframes loading {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
 }

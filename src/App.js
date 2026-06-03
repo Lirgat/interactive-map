@@ -8,10 +8,11 @@ import './App.css';
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
-  const [selectedDisease, setSelectedDisease] = useState('');
-  const [selectedAnimal, setSelectedAnimal] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedDisease, setSelectedDisease] = useState('bird_flu');
+  const [selectedAnimal, setSelectedAnimal] = useState('poultry');
+  const [selectedYear, setSelectedYear] = useState('2026');
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -23,6 +24,10 @@ function App() {
   const handleCountryClick = (country) => {
     setSelectedCountry(country);
     console.log('Selected:', country);
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   return (
@@ -38,7 +43,7 @@ function App() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
-          <Header />
+          <Header onToggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
           <div className="content-wrapper">
             <Sidebar 
               selectedDisease={selectedDisease}
@@ -47,6 +52,8 @@ function App() {
               setSelectedAnimal={setSelectedAnimal}
               selectedYear={selectedYear}
               setSelectedYear={setSelectedYear}
+              isOpen={isSidebarOpen}
+              onClose={toggleSidebar}
             />
             <RealWorldMap 
               onCountryClick={handleCountryClick}
@@ -54,6 +61,7 @@ function App() {
               selectedDisease={selectedDisease}
               selectedAnimal={selectedAnimal}
               selectedYear={selectedYear}
+              isSidebarOpen={isSidebarOpen}
             />
           </div>
         </motion.div>

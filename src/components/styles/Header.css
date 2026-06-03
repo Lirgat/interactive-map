@@ -2,16 +2,34 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 100;
+  padding: 12px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
-.logo-section {
+.header-left {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
+}
+
+.sidebar-toggle {
+  width: 32px;
+  height: 32px;
+  background: #ffffff;
+  border: 1px solid #d0d0d0;
+  color: #666666;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+  background: #f0f0f0;
+  border-color: #007aff;
+  color: #007aff;
 }
 
 .academy-logo {
@@ -19,27 +37,56 @@
   align-items: center;
 }
 
-.academy-name h2 {
-  font-size: 1.1rem;
-  color: #333;
+.academy-info h1 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333333;
   margin: 0;
 }
 
-.academy-name p {
-  font-size: 0.8rem;
-  color: #666;
-  margin: 5px 0 0 0;
+.academy-info p {
+  font-size: 0.7rem;
+  color: #888888;
+  margin: 3px 0 0 0;
 }
 
-.partner-logos {
+.header-right {
   display: flex;
-  gap: 15px;
+  gap: 24px;
 }
 
-.logo-item {
-  transition: transform 0.3s ease;
+.partner {
+  font-size: 0.75rem;
+  color: #666666;
+  font-weight: 400;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
 }
 
-.logo-item:hover {
-  transform: scale(1.1);
+.partner:hover {
+  color: #007aff;
+  background: #f0f7ff;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 10px 16px;
+  }
+  
+  .academy-info h1 {
+    font-size: 0.85rem;
+  }
+  
+  .academy-info p {
+    display: none;
+  }
+  
+  .header-right {
+    gap: 12px;
+  }
+  
+  .partner {
+    font-size: 0.65rem;
+  }
 }
