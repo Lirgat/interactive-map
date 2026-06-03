@@ -216,3 +216,211 @@
     min-width: auto;
   }
 }
+
+/* Анимация для появления карты */
+.realmap-wrapper {
+  animation: fadeInScale 0.5s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Анимация для легенды */
+.legend-item {
+  animation: fadeInLeft 0.3s ease-out forwards;
+  animation-delay: calc(var(--legend-order, 0) * 0.1s);
+  opacity: 0;
+}
+
+.legend-item:nth-child(1) { --legend-order: 1; }
+.legend-item:nth-child(2) { --legend-order: 2; }
+.legend-item:nth-child(3) { --legend-order: 3; }
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Анимация для кнопок управления */
+.map-control-btn {
+  transition: all 0.2s ease;
+}
+
+.map-control-btn:hover {
+  transform: scale(1.1);
+  background: #007aff;
+  color: white;
+  border-color: #007aff;
+}
+
+.map-control-btn:active {
+  transform: scale(0.95);
+}
+
+/* Анимация для тултипа */
+.map-tooltip {
+  animation: tooltipPop 0.2s ease-out;
+}
+
+@keyframes tooltipPop {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Анимация для деталей страны */
+.country-details {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Анимация пульсации для неблагополучных стран на карте */
+@keyframes countryPulse {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.05);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+/* Добавим класс для пульсирующих стран (можно добавить через JS для активных очагов) */
+.country-pulse {
+  animation: countryPulse 2s ease-in-out infinite;
+}
+
+/* Анимация для появления карты */
+.realmap-wrapper {
+  animation: fadeInScale 0.5s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Анимация для легенды */
+.legend-item {
+  animation: fadeInLeft 0.3s ease-out forwards;
+  animation-delay: calc(var(--legend-order, 0) * 0.1s);
+  opacity: 0;
+}
+
+.legend-item:nth-child(1) { --legend-order: 1; }
+.legend-item:nth-child(2) { --legend-order: 2; }
+.legend-item:nth-child(3) { --legend-order: 3; }
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Анимация для кнопок управления */
+.map-control-btn {
+  transition: all 0.2s ease;
+}
+
+.map-control-btn:hover {
+  transform: scale(1.1);
+  background: #007aff;
+  color: white;
+  border-color: #007aff;
+}
+
+.map-control-btn:active {
+  transform: scale(0.95);
+}
+
+/* Анимация для тултипа */
+.map-tooltip {
+  animation: tooltipPop 0.2s ease-out;
+}
+
+@keyframes tooltipPop {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Анимация для деталей страны */
+.country-details {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Анимация пульсации для неблагополучных стран на карте */
+@keyframes countryPulse {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.05);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+/* Добавим класс для пульсирующих стран (можно добавить через JS для активных очагов) */
+.country-pulse {
+  animation: countryPulse 2s ease-in-out infinite;
+}

@@ -351,3 +351,325 @@
   color: #888888;
   font-size: 14px;
 }
+
+/* Анимация для появления страницы */
+.analytics-page {
+  animation: fadeInPage 0.4s ease-out;
+}
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Анимация для графиков */
+.chart-card {
+  animation: chartRise 0.5s ease-out;
+  transform-origin: center;
+}
+
+@keyframes chartRise {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Анимация для статистических карточек */
+.analytics-stats .stat-card {
+  animation: statSlide 0.4s ease-out forwards;
+  animation-delay: calc(var(--stat-index, 0) * 0.05s);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.analytics-stats .stat-card:nth-child(1) { --stat-index: 1; }
+.analytics-stats .stat-card:nth-child(2) { --stat-index: 2; }
+.analytics-stats .stat-card:nth-child(3) { --stat-index: 3; }
+.analytics-stats .stat-card:nth-child(4) { --stat-index: 4; }
+.analytics-stats .stat-card:nth-child(5) { --stat-index: 5; }
+.analytics-stats .stat-card:nth-child(6) { --stat-index: 6; }
+
+@keyframes statSlide {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  transition: transform 0.2s ease;
+}
+
+/* Анимация для строк таблицы */
+.analytics-table tbody tr {
+  animation: tableRowFade 0.3s ease-out forwards;
+  animation-delay: calc(var(--row-index, 0) * 0.02s);
+  opacity: 0;
+}
+
+@keyframes tableRowFade {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Анимация для кнопок экспорта */
+.export-btn {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.export-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.export-btn:hover::before {
+  left: 100%;
+}
+
+.export-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.export-btn:active {
+  transform: translateY(0);
+}
+
+/* Анимация для переключения типа графика */
+.chart-type-switch button {
+  transition: all 0.2s ease;
+}
+
+.chart-type-switch button:hover {
+  transform: translateY(-1px);
+}
+
+.chart-type-switch button.active {
+  animation: buttonGlow 0.3s ease-out;
+}
+
+@keyframes buttonGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 122, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 4px rgba(0, 122, 255, 0);
+  }
+}
+
+/* Анимация загрузки для графиков */
+.chart-placeholder {
+  animation: pulse 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes pulse {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Анимация для фильтров */
+.filter-group select, .filter-group input {
+  transition: all 0.2s ease;
+}
+
+.filter-group select:focus, .filter-group input:focus {
+  transform: scale(1.02);
+}
+
+/* Анимация для кнопки назад */
+.back-to-map-btn {
+  transition: all 0.2s ease;
+}
+
+.back-to-map-btn:hover {
+  transform: translateX(-3px);
+  background: #007aff;
+  color: white;
+  border-color: #007aff;
+}
+
+/* Анимация для появления страницы */
+.analytics-page {
+  animation: fadeInPage 0.4s ease-out;
+}
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Анимация для графиков */
+.chart-card {
+  animation: chartRise 0.5s ease-out;
+  transform-origin: center;
+}
+
+@keyframes chartRise {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Анимация для статистических карточек */
+.analytics-stats .stat-card {
+  animation: statSlide 0.4s ease-out forwards;
+  animation-delay: calc(var(--stat-index, 0) * 0.05s);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.analytics-stats .stat-card:nth-child(1) { --stat-index: 1; }
+.analytics-stats .stat-card:nth-child(2) { --stat-index: 2; }
+.analytics-stats .stat-card:nth-child(3) { --stat-index: 3; }
+.analytics-stats .stat-card:nth-child(4) { --stat-index: 4; }
+.analytics-stats .stat-card:nth-child(5) { --stat-index: 5; }
+.analytics-stats .stat-card:nth-child(6) { --stat-index: 6; }
+
+@keyframes statSlide {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  transition: transform 0.2s ease;
+}
+
+/* Анимация для строк таблицы */
+.analytics-table tbody tr {
+  animation: tableRowFade 0.3s ease-out forwards;
+  animation-delay: calc(var(--row-index, 0) * 0.02s);
+  opacity: 0;
+}
+
+@keyframes tableRowFade {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Анимация для кнопок экспорта */
+.export-btn {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.export-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.export-btn:hover::before {
+  left: 100%;
+}
+
+.export-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.export-btn:active {
+  transform: translateY(0);
+}
+
+/* Анимация для переключения типа графика */
+.chart-type-switch button {
+  transition: all 0.2s ease;
+}
+
+.chart-type-switch button:hover {
+  transform: translateY(-1px);
+}
+
+.chart-type-switch button.active {
+  animation: buttonGlow 0.3s ease-out;
+}
+
+@keyframes buttonGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 122, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 4px rgba(0, 122, 255, 0);
+  }
+}
+
+/* Анимация загрузки для графиков */
+.chart-placeholder {
+  animation: pulse 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes pulse {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Анимация для фильтров */
+.filter-group select, .filter-group input {
+  transition: all 0.2s ease;
+}
+
+.filter-group select:focus, .filter-group input:focus {
+  transform: scale(1.02);
+}
+
+/* Анимация для кнопки назад */
+.back-to-map-btn {
+  transition: all 0.2s ease;
+}
+
+.back-to-map-btn:hover {
+  transform: translateX(-3px);
+  background: #007aff;
+  color: white;
+  border-color: #007aff;
+}

@@ -97,22 +97,54 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
   }, [selectedDisease]);
 
   const customStyles = {
-    control: (provided) => ({
+    control: (provided, state) => ({
       ...provided,
       borderRadius: '6px',
-      borderColor: '#d0d0d0',
-      boxShadow: 'none',
+      borderColor: state.isFocused ? '#007aff' : '#d0d0d0',
+      boxShadow: state.isFocused ? '0 0 0 1px #007aff' : 'none',
+      minHeight: '36px',
       '&:hover': {
         borderColor: '#007aff'
       }
+    }),
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+      position: 'absolute'
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      maxHeight: '200px',
+      overflowY: 'auto'
     }),
     option: (provided, state) => ({
       ...provided,
       backgroundColor: state.isSelected ? '#007aff' : state.isFocused ? '#f0f7ff' : '#ffffff',
       color: state.isSelected ? '#ffffff' : '#333333',
-      '&:hover': {
-        backgroundColor: state.isSelected ? '#007aff' : '#f0f7ff'
+      padding: '8px 12px',
+      cursor: 'pointer',
+      '&:active': {
+        backgroundColor: '#007aff'
       }
+    }),
+    dropdownIndicator: (provided) => ({
+      ...provided,
+      color: '#888888',
+      '&:hover': {
+        color: '#007aff'
+      }
+    }),
+    indicatorSeparator: (provided) => ({
+      ...provided,
+      backgroundColor: '#e0e0e0'
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: '#999999'
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: '#333333'
     })
   };
 
@@ -152,6 +184,8 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
               placeholder="Выберите раздел"
               defaultValue={defaultMenuOption}
               onChange={handleMenuSelect}
+              menuPortalTarget={document.body}
+              menuPosition="fixed"
             />
           </div>
 
@@ -163,6 +197,8 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
               placeholder="Выберите заболевание"
               value={currentDiseaseOption}
               onChange={(option) => setSelectedDisease(option?.value || '')}
+              menuPortalTarget={document.body}
+              menuPosition="fixed"
             />
             {selectedDiseaseInfo && (
               <div className="info-note">
@@ -182,6 +218,8 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
               onChange={(option) => setSelectedAnimal(option?.value || '')}
               isDisabled={!selectedDisease || availableAnimals.length === 0}
               noOptionsMessage={() => "Нет восприимчивых видов"}
+              menuPortalTarget={document.body}
+              menuPosition="fixed"
             />
             {!selectedDisease && (
               <div className="info-note warning">
@@ -198,6 +236,8 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
               placeholder="Выберите год"
               value={currentYearOption}
               onChange={(option) => setSelectedYear(option?.value || '')}
+              menuPortalTarget={document.body}
+              menuPosition="fixed"
             />
           </div>
 

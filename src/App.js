@@ -7,6 +7,19 @@ import RealWorldMap from './components/RealWorldMap';
 import AnalyticsPage from './components/AnalyticsPage';
 import './App.css';
 
+// Варианты анимации для страниц
+const pageVariants = {
+  initial: { opacity: 0, x: -20 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: 20 }
+};
+
+const pageTransition = {
+  type: 'tween',
+  ease: 'anticipate',
+  duration: 0.4
+};
+
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [currentPage, setCurrentPage] = useState('map');
@@ -25,7 +38,6 @@ function App() {
 
   const handleCountryClick = (country) => {
     setSelectedCountry(country);
-    console.log('Selected:', country);
   };
 
   const toggleSidebar = () => {
@@ -51,12 +63,7 @@ function App() {
       </AnimatePresence>
       
       {!showSplash && (
-        <motion.div 
-          className="main-container"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
+        <div className="main-container">
           <Header 
             onToggleSidebar={toggleSidebar} 
             isSidebarOpen={isSidebarOpen} 
@@ -64,34 +71,56 @@ function App() {
             onNavigateToMap={navigateToMap}
           />
           <div className="content-wrapper">
-            {currentPage === 'map' && (
-              <>
-                <Sidebar 
-                  selectedDisease={selectedDisease}
-                  setSelectedDisease={setSelectedDisease}
-                  selectedAnimal={selectedAnimal}
-                  setSelectedAnimal={setSelectedAnimal}
-                  selectedYear={selectedYear}
-                  setSelectedYear={setSelectedYear}
-                  isOpen={isSidebarOpen}
-                  onClose={toggleSidebar}
-                  onMenuChange={handleMenuChange}
-                />
-                <RealWorldMap 
-                  onCountryClick={handleCountryClick}
-                  selectedCountry={selectedCountry}
-                  selectedDisease={selectedDisease}
-                  selectedAnimal={selectedAnimal}
-                  selectedYear={selectedYear}
-                  isSidebarOpen={isSidebarOpen}
-                />
-              </>
-            )}
-            {currentPage === 'analytics' && (
-              <AnalyticsPage onBackToMap={navigateToMap} />
-            )}
+            <AnimatePresence mode="wait">
+              {currentPage === 'map' && (
+                <motion.div
+                  key="map-page"
+                  className="page-container"
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={pageTransition}
+                  style={{ display: 'flex', width: '100%', gap: '16px' }}
+                >
+                  <Sidebar 
+                    selectedDisease={selectedDisease}
+                    setSelectedDisease={setSelectedDisease}
+                    selectedAnimal={selectedAnimal}
+                    setSelectedAnimal={setSelectedAnimal}
+                    selectedYear={selectedYear}
+                    setSelectedYear={setSelectedYear}
+                    isOpen={isSidebarOpen}
+                    onClose={toggleSidebar}
+                    onMenuChange={handleMenuChange}
+                  />
+                  <RealWorldMap 
+                    onCountryClick={handleCountryClick}
+                    selectedCountry={selectedCountry}
+                    selectedDisease={selectedDisease}
+                    selectedAnimal={selectedAnimal}
+                    selectedYear={selectedYear}
+                    isSidebarOpen={isSidebarOpen}
+                  />
+                </motion.div>
+              )}
+              {currentPage === 'analytics' && (
+                <motion.div
+                  key="analytics-page"
+                  className="page-container"
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={pageTransition}
+                  style={{ width: '100%' }}
+                >
+                  <AnalyticsPage onBackToMap={navigateToMap} />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        </motion.div>
+        </div>
       )}
     </div>
   );

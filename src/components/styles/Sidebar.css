@@ -7,6 +7,7 @@
   flex-direction: column;
   overflow-y: auto;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  max-height: calc(100vh - 100px);
 }
 
 .sidebar-header {
@@ -16,7 +17,10 @@
   justify-content: space-between;
   align-items: center;
   background: #fafbfc;
-  border-radius: 10px 10px 0 0;
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  z-index: 5;
 }
 
 .sidebar-header h3 {
@@ -42,6 +46,7 @@
   background: #007aff;
   border-color: #007aff;
   color: #ffffff;
+  transform: rotate(90deg);
 }
 
 .sidebar-section {
@@ -97,12 +102,12 @@
   background: #ffffff;
   border-radius: 8px;
   border: 1px solid #e8e8e8;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .stat-card:hover {
-  border-color: #007aff;
-  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 122, 255, 0.15);
 }
 
 .stat-value {
@@ -166,4 +171,79 @@
 .filter-remove:hover {
   background: #ff4444;
   color: #ffffff;
+}
+
+/* Стили скроллбара */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* Анимации */
+.sidebar-section {
+  animation: fadeInUp 0.4s ease-out forwards;
+  animation-delay: calc(var(--animation-order, 0) * 0.05s);
+  opacity: 0;
+}
+
+.sidebar-section:nth-child(1) { --animation-order: 1; }
+.sidebar-section:nth-child(2) { --animation-order: 2; }
+.sidebar-section:nth-child(3) { --animation-order: 3; }
+.sidebar-section:nth-child(4) { --animation-order: 4; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-card {
+  animation: scaleIn 0.3s ease-out forwards;
+  animation-delay: calc(var(--stat-order, 0) * 0.1s);
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.stat-card:nth-child(1) { --stat-order: 1; }
+.stat-card:nth-child(2) { --stat-order: 2; }
+.stat-card:nth-child(3) { --stat-order: 3; }
+
+@keyframes scaleIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.active-filter {
+  animation: slideInRight 0.3s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
