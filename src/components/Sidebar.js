@@ -3,7 +3,7 @@ import Select from 'react-select';
 import { motion, AnimatePresence } from 'framer-motion';
 import './styles/Sidebar.css';
 
-const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelectedAnimal, selectedYear, setSelectedYear, isOpen, onClose }) => {
+const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelectedAnimal, selectedYear, setSelectedYear, isOpen, onClose, onMenuChange }) => {
   
   const diseaseAnimalMapping = {
     'bird_flu': {
@@ -49,9 +49,8 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
     { value: 'horses', label: 'Лошади' }
   ];
 
-  // Значения по умолчанию
   const defaultMenuOption = { value: 'dashboard', label: 'Панель управления' };
-  const defaultDiseaseOption = diseaseOptions[0]; // Грипп птиц
+  const defaultDiseaseOption = diseaseOptions[0];
   const defaultYearOption = { value: '2026', label: '2026' };
 
   const menuOptions = [
@@ -76,7 +75,6 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
     return allAnimalOptions.filter(animal => allowedAnimals.includes(animal.value));
   };
 
-  // Установка значений по умолчанию при монтировании
   useEffect(() => {
     if (!selectedDisease) {
       setSelectedDisease(defaultDiseaseOption.value);
@@ -86,15 +84,12 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
     }
   }, []);
 
-  // Обновление доступного животного при изменении болезни
   useEffect(() => {
     if (selectedDisease) {
       const availableAnimals = getAvailableAnimals();
-      // Если выбранное животное не доступно, сбрасываем
       if (selectedAnimal && !availableAnimals.some(a => a.value === selectedAnimal)) {
         setSelectedAnimal('');
       }
-      // Если животное не выбрано и есть доступные, выбираем первое
       if (!selectedAnimal && availableAnimals.length > 0) {
         setSelectedAnimal(availableAnimals[0].value);
       }
@@ -124,10 +119,15 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
   const availableAnimals = getAvailableAnimals();
   const selectedDiseaseInfo = selectedDisease ? diseaseAnimalMapping[selectedDisease] : null;
   
-  // Текущие выбранные опции
   const currentDiseaseOption = diseaseOptions.find(option => option.value === selectedDisease) || defaultDiseaseOption;
   const currentYearOption = yearOptions.find(option => option.value === selectedYear) || defaultYearOption;
   const currentAnimalOption = availableAnimals.find(option => option.value === selectedAnimal);
+
+  const handleMenuSelect = (option) => {
+    if (option && onMenuChange) {
+      onMenuChange(option.value);
+    }
+  };
 
   return (
     <AnimatePresence mode="wait">
@@ -151,7 +151,7 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
               styles={customStyles}
               placeholder="Выберите раздел"
               defaultValue={defaultMenuOption}
-              onChange={(option) => console.log('Menu selected:', option)}
+              onChange={handleMenuSelect}
             />
           </div>
 

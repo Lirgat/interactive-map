@@ -1,13 +1,20 @@
 import React from 'react';
 import './styles/Header.css';
 
-const Header = ({ onToggleSidebar, isSidebarOpen }) => {
+const Header = ({ onToggleSidebar, isSidebarOpen, currentPage, onNavigateToMap }) => {
   return (
     <header className="header">
       <div className="header-left">
-        <button className="sidebar-toggle" onClick={onToggleSidebar} title={isSidebarOpen ? "Скрыть панель" : "Показать панель"}>
-          {isSidebarOpen ? '◀' : '▶'}
-        </button>
+        {currentPage === 'map' && (
+          <button className="sidebar-toggle" onClick={onToggleSidebar} title={isSidebarOpen ? "Скрыть панель" : "Показать панель"}>
+            {isSidebarOpen ? '◀' : '▶'}
+          </button>
+        )}
+        {currentPage === 'analytics' && (
+          <button className="back-button" onClick={onNavigateToMap} title="Вернуться к карте">
+            ← Назад к карте
+          </button>
+        )}
         <div className="academy-logo">
           <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
             <rect x="2" y="2" width="36" height="36" rx="6" fill="#007aff" opacity="0.1"/>

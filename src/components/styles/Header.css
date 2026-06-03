@@ -32,6 +32,23 @@
   color: #007aff;
 }
 
+.back-button {
+  padding: 6px 14px;
+  background: #ffffff;
+  border: 1px solid #007aff;
+  color: #007aff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background: #007aff;
+  color: #ffffff;
+}
+
 .academy-logo {
   display: flex;
   align-items: center;
@@ -88,5 +105,10 @@
   
   .partner {
     font-size: 0.65rem;
+  }
+  
+  .back-button {
+    padding: 4px 10px;
+    font-size: 11px;
   }
 }
