@@ -22,7 +22,7 @@ function App() {
 
   const handleCountryClick = (country) => {
     setSelectedCountry(country);
-    console.log('Selected country:', country);
+    console.log('Selected:', country);
   };
 
   return (

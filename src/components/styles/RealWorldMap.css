@@ -36,33 +36,62 @@
 }
 
 .legend-color {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
 }
 
-.legend-color.high-risk {
+.legend-color.favorable {
+  background: #4CAF50;
+  border: 1px solid #388E3C;
+}
+
+.legend-color.unfavorable {
   background: #FF4444;
-  box-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
+  border: 1px solid #CC0000;
 }
 
-.legend-color.medium-risk {
-  background: #FFA500;
-  box-shadow: 0 0 5px rgba(255, 165, 0, 0.5);
+.legend-color.unknown {
+  background: #FFFFFF;
+  border: 1px solid #CCCCCC;
 }
 
-.legend-color.low-risk {
-  background: #FFD700;
-  box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+.legend-color.no-data {
+  background: #E0E0E0;
+  border: 1px solid #BDBDBD;
 }
 
-.legend-marker-example {
-  width: 12px;
-  height: 12px;
+.map-controls {
+  display: flex;
+  gap: 8px;
+  background: white;
+  padding: 5px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.map-control-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
   background: #007aff;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 0 0 2px #007aff;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-control-btn:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+.map-control-btn:active {
+  transform: scale(0.95);
 }
 
 .map-filters-info {
@@ -96,7 +125,7 @@
   pointer-events: none;
   z-index: 1000;
   backdrop-filter: blur(10px);
-  min-width: 180px;
+  min-width: 200px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   animation: fadeIn 0.2s ease;
 }
@@ -114,12 +143,12 @@
 
 .map-tooltip strong {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   color: #007aff;
   font-size: 13px;
 }
 
-.tooltip-risk {
+.tooltip-status, .tooltip-risk {
   margin: 5px 0;
   color: #fff;
 }
@@ -185,6 +214,18 @@
 }
 
 .risk-low {
+  color: #4CAF50;
+}
+
+.status-favorable {
+  color: #4CAF50;
+}
+
+.status-unfavorable {
+  color: #FF4444;
+}
+
+.status-unknown {
   color: #FFD700;
 }
 
@@ -223,5 +264,9 @@
   .filter-badge {
     font-size: 10px;
     padding: 3px 8px;
+  }
+  
+  .map-controls {
+    align-self: flex-end;
   }
 }
