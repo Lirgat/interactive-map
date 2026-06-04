@@ -4,7 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,7 +13,7 @@
 
 .splash-content {
   text-align: center;
-  color: white;
+  color: #007aff;
 }
 
 .splash-title {
@@ -22,18 +22,20 @@
   font-weight: 600;
   letter-spacing: -0.5px;
   animation: fadeInUp 0.8s ease-out;
+  color: #333333;
 }
 
 .splash-subtitle {
   font-size: 1rem;
   margin-top: 10px;
-  opacity: 0.9;
+  opacity: 0.7;
   animation: fadeInUp 0.8s ease-out 0.3s backwards;
+  color: #666666;
 }
 
 .loading-bar {
   height: 3px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(0, 122, 255, 0.1);
   margin-top: 40px;
   border-radius: 3px;
   width: 200px;
@@ -50,7 +52,7 @@
   left: 0;
   height: 100%;
   width: 100%;
-  background: white;
+  background: #007aff;
   animation: loading 2.5s ease-in-out;
 }
 
@@ -79,7 +81,6 @@
   }
 }
 
-/* Анимация для логотипа */
 .logo-animation {
   animation: logoFloat 2s ease-in-out infinite;
 }

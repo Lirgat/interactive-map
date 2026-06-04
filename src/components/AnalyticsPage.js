@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { yearlyData } from '../data/countryData';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { exportToPDFWithRussianText } from '../utils/pdfExportRussian';
 import '../utils/chartConfig';
 import './styles/AnalyticsPage.css';
 
@@ -18,30 +21,6 @@ const loadChartModules = async () => {
   }
 };
 
-// Функции экспорта
-let saveAs, XLSX, jsPDF, autoTable;
-
-const loadExportModules = async () => {
-  try {
-    const fileSaver = await import('file-saver');
-    saveAs = fileSaver.saveAs;
-    
-    const xlsxModule = await import('xlsx');
-    XLSX = xlsxModule.default;
-    
-    const jspdfModule = await import('jspdf');
-    jsPDF = jspdfModule.default;
-    
-    const autoTableModule = await import('jspdf-autotable');
-    autoTable = autoTableModule.default;
-    
-    return true;
-  } catch (error) {
-    console.error('Error loading export modules:', error);
-    return false;
-  }
-};
-
 const AnalyticsPage = ({ onBackToMap }) => {
   const [selectedYear, setSelectedYear] = useState('2026');
   const [selectedStatus, setSelectedStatus] = useState('all');
@@ -53,7 +32,6 @@ const AnalyticsPage = ({ onBackToMap }) => {
   const [yearlyStats, setYearlyStats] = useState({});
   const [topCountries, setTopCountries] = useState([]);
   const [chartsLoaded, setChartsLoaded] = useState(false);
-  const [exportLoaded, setExportLoaded] = useState(false);
   const [summaryStats, setSummaryStats] = useState({
     totalCountries: 0,
     unfavorableCount: 0,
@@ -63,15 +41,9 @@ const AnalyticsPage = ({ onBackToMap }) => {
     highRiskCount: 0
   });
 
-  // Загрузка модулей при монтировании
+  // Загрузка модулей графиков
   useEffect(() => {
-    Promise.all([
-      loadChartModules(),
-      loadExportModules()
-    ]).then(([chartsOk, exportOk]) => {
-      setChartsLoaded(chartsOk);
-      setExportLoaded(exportOk);
-    });
+    loadChartModules().then(setChartsLoaded);
   }, []);
 
   // Загрузка данных при изменении года
@@ -221,93 +193,37 @@ const AnalyticsPage = ({ onBackToMap }) => {
     plugins: {
       legend: {
         position: 'top',
-        labels: {
-          font: { size: 11 },
-          usePointStyle: true,
-          boxWidth: 8
-        }
+        labels: { font: { size: 11 }, usePointStyle: true, boxWidth: 8 }
       },
-      tooltip: {
-        mode: 'index',
-        intersect: false
-      }
+      tooltip: { mode: 'index', intersect: false }
     },
     scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Количество',
-          font: { size: 10 }
-        }
-      },
-      y1: {
-        position: 'right',
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Летальность (%)',
-          font: { size: 10 }
-        },
-        grid: {
-          drawOnChartArea: false
-        }
-      }
+      y: { beginAtZero: true, title: { display: true, text: 'Количество', font: { size: 10 } } },
+      y1: { position: 'right', beginAtZero: true, title: { display: true, text: 'Летальность (%)', font: { size: 10 } }, grid: { drawOnChartArea: false } }
     }
   };
 
   const barOptions = {
     responsive: true,
     maintainAspectRatio: true,
-    plugins: {
-      legend: {
-        position: 'top',
-        labels: {
-          font: { size: 11 }
-        }
-      }
-    },
+    plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } },
     scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Количество случаев',
-          font: { size: 10 }
-        }
-      },
-      y1: {
-        position: 'right',
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Летальность (%)',
-          font: { size: 10 }
-        },
-        grid: {
-          drawOnChartArea: false
-        }
-      }
+      y: { beginAtZero: true, title: { display: true, text: 'Количество случаев', font: { size: 10 } } },
+      y1: { position: 'right', beginAtZero: true, title: { display: true, text: 'Летальность (%)', font: { size: 10 } }, grid: { drawOnChartArea: false } }
     }
   };
 
   const getFilteredData = () => {
     let filtered = [...analyticsData];
-    
     if (selectedStatus !== 'all') {
       filtered = filtered.filter(c => c.status === selectedStatus);
     }
-    
     if (searchTerm) {
-      filtered = filtered.filter(c => 
-        c.country.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      filtered = filtered.filter(c => c.country.toLowerCase().includes(searchTerm.toLowerCase()));
     }
-    
     filtered.sort((a, b) => {
       let aVal = a[sortField];
       let bVal = b[sortField];
-      
       if (sortField === 'cases') {
         aVal = a.cases || 0;
         bVal = b.cases || 0;
@@ -318,14 +234,8 @@ const AnalyticsPage = ({ onBackToMap }) => {
         aVal = a.country;
         bVal = b.country;
       }
-      
-      if (sortDirection === 'asc') {
-        return aVal > bVal ? 1 : -1;
-      } else {
-        return aVal < bVal ? 1 : -1;
-      }
+      return sortDirection === 'asc' ? (aVal > bVal ? 1 : -1) : (aVal < bVal ? 1 : -1);
     });
-    
     return filtered;
   };
 
@@ -338,12 +248,8 @@ const AnalyticsPage = ({ onBackToMap }) => {
     }
   };
 
+  // Экспорт в CSV
   const exportToCSV = () => {
-    if (!saveAs) {
-      alert('Модуль экспорта не загружен. Попробуйте обновить страницу.');
-      return;
-    }
-    
     const filtered = getFilteredData();
     const headers = ['Страна', 'Статус', 'Риск', 'Случаи', 'Летальность', 'Генотип', 'Последняя вспышка', 'Эконом. ущерб'];
     const rows = filtered.map(c => [
@@ -356,87 +262,50 @@ const AnalyticsPage = ({ onBackToMap }) => {
       c.lastOutbreak || '-',
       c.economicDamage || '-'
     ]);
-    
     const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n');
     const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
     saveAs(blob, `epizootic_report_${selectedYear}.csv`);
   };
 
+  // Экспорт в Excel
   const exportToExcel = () => {
-    if (!XLSX) {
-      alert('Модуль экспорта не загружен. Попробуйте обновить страницу.');
-      return;
+    try {
+      const filtered = getFilteredData();
+      const wsData = filtered.map(c => ({
+        'Страна': c.country || '',
+        'Статус': c.status === 'unfavorable' ? 'Неблагополучная' : 'Благополучная',
+        'Уровень риска': c.risk === 'high' ? 'Высокий' : c.risk === 'medium' ? 'Средний' : 'Низкий',
+        'Количество случаев': (c.cases || 0).toString(),
+        'Летальность': c.mortality || '0%',
+        'Генотип': c.genotype || '-',
+        'Последняя вспышка': c.lastOutbreak || '-',
+        'Пораженные виды': c.animals?.map(a => 
+          a === 'poultry' ? 'Птица' : a === 'cattle' ? 'КРС' : a === 'pigs' ? 'Свиньи' : a === 'sheep' ? 'МРС' : 'Лошади'
+        ).join(', ') || '-',
+        'Затронутые регионы': c.regions?.join(', ') || '-',
+        'Мероприятия': c.controlMeasures || '-',
+        'Экономический ущерб': c.economicDamage || '-',
+        'Прогноз': c.forecast || '-'
+      }));
+      
+      const ws = XLSX.utils.json_to_sheet(wsData);
+      ws['!cols'] = [{ wch: 20 }, { wch: 15 }, { wch: 12 }, { wch: 12 }, { wch: 10 }, { wch: 15 }, { wch: 15 }, { wch: 20 }, { wch: 25 }, { wch: 30 }, { wch: 20 }, { wch: 25 }];
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, `Отчёт ${selectedYear}`);
+      XLSX.writeFile(wb, `epizootic_report_${selectedYear}.xlsx`);
+    } catch (error) {
+      console.error('Excel export error:', error);
+      alert('Ошибка при экспорте в Excel');
     }
-    
-    const filtered = getFilteredData();
-    const wsData = filtered.map(c => ({
-      'Страна': c.country,
-      'Статус': c.status === 'unfavorable' ? 'Неблагополучная' : 'Благополучная',
-      'Уровень риска': c.risk === 'high' ? 'Высокий' : c.risk === 'medium' ? 'Средний' : 'Низкий',
-      'Количество случаев': c.cases || 0,
-      'Летальность': c.mortality || '0%',
-      'Генотип': c.genotype || '-',
-      'Последняя вспышка': c.lastOutbreak || '-',
-      'Пораженные виды': c.animals?.map(a => 
-        a === 'poultry' ? 'Птица' : a === 'cattle' ? 'КРС' : a === 'pigs' ? 'Свиньи' : a === 'sheep' ? 'МРС' : 'Лошади'
-      ).join(', ') || '-',
-      'Затронутые регионы': c.regions?.join(', ') || '-',
-      'Мероприятия': c.controlMeasures || '-',
-      'Экономический ущерб': c.economicDamage || '-',
-      'Прогноз': c.forecast || '-'
-    }));
-    
-    const ws = XLSX.utils.json_to_sheet(wsData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, `Отчёт ${selectedYear}`);
-    XLSX.writeFile(wb, `epizootic_report_${selectedYear}.xlsx`);
   };
 
-  const exportToPDF = async () => {
-    if (!jsPDF || !autoTable) {
-      alert('Модуль экспорта не загружен. Попробуйте обновить страницу.');
-      return;
-    }
-    
+  // Экспорт в PDF
+  const exportToPDF = () => {
     const filtered = getFilteredData();
-    const doc = new jsPDF('landscape');
-    
-    doc.setFontSize(16);
-    doc.setTextColor(0, 122, 255);
-    doc.text(`Аналитический отчёт по эпизоотической ситуации за ${selectedYear} год`, 14, 15);
-    
-    doc.setFontSize(10);
-    doc.setTextColor(100, 100, 100);
-    doc.text(`Дата формирования: ${new Date().toLocaleDateString('ru-RU')}`, 14, 25);
-    
-    doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Всего стран: ${summaryStats.totalCountries}`, 14, 35);
-    doc.text(`Неблагополучных: ${summaryStats.unfavorableCount}`, 14, 42);
-    doc.text(`Благополучных: ${summaryStats.favorableCount}`, 14, 49);
-    doc.text(`Всего случаев: ${summaryStats.totalCases}`, 14, 56);
-    doc.text(`Средняя летальность: ${summaryStats.avgMortality}%`, 14, 63);
-    
-    const tableData = filtered.map(c => [
-      c.country,
-      c.status === 'unfavorable' ? 'Неблагополучная' : 'Благополучная',
-      c.risk === 'high' ? 'Высокий' : c.risk === 'medium' ? 'Средний' : 'Низкий',
-      (c.cases || 0).toString(),
-      c.mortality || '0%',
-      c.genotype || '-',
-      c.lastOutbreak || '-'
-    ]);
-    
-    autoTable(doc, {
-      head: [['Страна', 'Статус', 'Риск', 'Случаи', 'Летальность', 'Генотип', 'Последняя вспышка']],
-      body: tableData,
-      startY: 70,
-      styles: { fontSize: 8, cellPadding: 2 },
-      headStyles: { fillColor: [0, 122, 255], textColor: 255, fontSize: 9 },
-      alternateRowStyles: { fillColor: [245, 245, 245] }
-    });
-    
-    doc.save(`epizootic_report_${selectedYear}.pdf`);
+    const success = exportToPDFWithRussianText(filtered, summaryStats, selectedYear);
+    if (!success) {
+      alert('Ошибка при экспорте в PDF');
+    }
   };
 
   const filteredData = getFilteredData();
@@ -455,39 +324,25 @@ const AnalyticsPage = ({ onBackToMap }) => {
 
   const renderChart = () => {
     if (!chartsLoaded || !Line || !Bar) {
-      return (
-        <div className="chart-placeholder">
-          <p>Загрузка графиков...</p>
-        </div>
-      );
+      return <div className="chart-placeholder"><p>Загрузка графиков...</p></div>;
     }
-
-    return chartType === 'line' ? (
-      <Line data={getYearlyChartData()} options={chartOptions} />
-    ) : (
-      <Bar data={getYearlyChartData()} options={chartOptions} />
-    );
+    return chartType === 'line' 
+      ? <Line key="line-chart" data={getYearlyChartData()} options={chartOptions} />
+      : <Bar key="bar-chart" data={getYearlyChartData()} options={chartOptions} />;
   };
 
   const renderTopChart = () => {
     if (!chartsLoaded || !Bar) {
-      return (
-        <div className="chart-placeholder">
-          <p>Загрузка графиков...</p>
-        </div>
-      );
+      return <div className="chart-placeholder"><p>Загрузка графиков...</p></div>;
     }
-
-    return <Bar data={getTopCountriesChartData()} options={barOptions} />;
+    return <Bar key="top-bar-chart" data={getTopCountriesChartData()} options={barOptions} />;
   };
 
   return (
     <div className="analytics-page">
       <div className="analytics-header">
         <div className="analytics-title">
-          <button className="back-to-map-btn" onClick={onBackToMap} title="Вернуться к карте">
-            ←
-          </button>
+          <button className="back-to-map-btn" onClick={onBackToMap} title="Вернуться к карте">←</button>
           <h2>Аналитические отчёты</h2>
         </div>
         <div className="export-buttons">
@@ -502,142 +357,49 @@ const AnalyticsPage = ({ onBackToMap }) => {
           <div className="chart-header">
             <h3>Динамика эпизоотической ситуации (2024-2027)</h3>
             <div className="chart-type-switch">
-              <button 
-                className={chartType === 'line' ? 'active' : ''} 
-                onClick={() => setChartType('line')}
-              >
-                Линия
-              </button>
-              <button 
-                className={chartType === 'bar' ? 'active' : ''} 
-                onClick={() => setChartType('bar')}
-              >
-                Столбцы
-              </button>
+              <button className={chartType === 'line' ? 'active' : ''} onClick={() => setChartType('line')}>Линия</button>
+              <button className={chartType === 'bar' ? 'active' : ''} onClick={() => setChartType('bar')}>Столбцы</button>
             </div>
           </div>
-          <div className="chart-wrapper">
-            {renderChart()}
-          </div>
+          <div className="chart-wrapper">{renderChart()}</div>
         </div>
-
         {topCountries.length > 0 && (
           <div className="chart-card">
-            <div className="chart-header">
-              <h3>Топ-5 стран по количеству случаев ({selectedYear})</h3>
-            </div>
-            <div className="chart-wrapper">
-              {renderTopChart()}
-            </div>
+            <div className="chart-header"><h3>Топ-5 стран по количеству случаев ({selectedYear})</h3></div>
+            <div className="chart-wrapper">{renderTopChart()}</div>
           </div>
         )}
       </div>
 
       <div className="analytics-stats">
-        <div className="stat-card">
-          <div className="stat-value">{summaryStats.totalCountries}</div>
-          <div className="stat-label">Всего стран</div>
-        </div>
-        <div className="stat-card unfavorable">
-          <div className="stat-value">{summaryStats.unfavorableCount}</div>
-          <div className="stat-label">Неблагополучные</div>
-        </div>
-        <div className="stat-card favorable">
-          <div className="stat-value">{summaryStats.favorableCount}</div>
-          <div className="stat-label">Благополучные</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-value">{summaryStats.totalCases}</div>
-          <div className="stat-label">Всего случаев</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-value">{summaryStats.avgMortality}%</div>
-          <div className="stat-label">Средняя летальность</div>
-        </div>
-        <div className="stat-card high-risk">
-          <div className="stat-value">{summaryStats.highRiskCount}</div>
-          <div className="stat-label">Высокий риск</div>
-        </div>
+        <div className="stat-card"><div className="stat-value">{summaryStats.totalCountries}</div><div className="stat-label">Всего стран</div></div>
+        <div className="stat-card unfavorable"><div className="stat-value">{summaryStats.unfavorableCount}</div><div className="stat-label">Неблагополучные</div></div>
+        <div className="stat-card favorable"><div className="stat-value">{summaryStats.favorableCount}</div><div className="stat-label">Благополучные</div></div>
+        <div className="stat-card"><div className="stat-value">{summaryStats.totalCases}</div><div className="stat-label">Всего случаев</div></div>
+        <div className="stat-card"><div className="stat-value">{summaryStats.avgMortality}%</div><div className="stat-label">Средняя летальность</div></div>
+        <div className="stat-card high-risk"><div className="stat-value">{summaryStats.highRiskCount}</div><div className="stat-label">Высокий риск</div></div>
       </div>
 
       <div className="analytics-filters">
-        <div className="filter-group">
-          <label>Год</label>
-          <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
-            <option value="2027">2027 (прогноз)</option>
-          </select>
-        </div>
-        <div className="filter-group">
-          <label>Статус</label>
-          <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
-            <option value="all">Все</option>
-            <option value="unfavorable">Неблагополучные</option>
-            <option value="favorable">Благополучные</option>
-          </select>
-        </div>
-        <div className="filter-group">
-          <label>Поиск</label>
-          <input
-            type="text"
-            placeholder="Название страны..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+        <div className="filter-group"><label>Год</label><select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027 (прогноз)</option></select></div>
+        <div className="filter-group"><label>Статус</label><select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}><option value="all">Все</option><option value="unfavorable">Неблагополучные</option><option value="favorable">Благополучные</option></select></div>
+        <div className="filter-group"><label>Поиск</label><input type="text" placeholder="Название страны..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} /></div>
       </div>
 
       <div className="analytics-table-container">
         <table className="analytics-table">
-          <thead>
-            <tr>
-              <th onClick={() => handleSort('country')}>
-                Страна {sortField === 'country' && (sortDirection === 'asc' ? '↑' : '↓')}
-              </th>
-              <th>Статус</th>
-              <th>Риск</th>
-              <th onClick={() => handleSort('cases')}>
-                Случаи {sortField === 'cases' && (sortDirection === 'asc' ? '↑' : '↓')}
-              </th>
-              <th onClick={() => handleSort('mortality')}>
-                Летальность {sortField === 'mortality' && (sortDirection === 'asc' ? '↑' : '↓')}
-              </th>
-              <th>Генотип</th>
-              <th>Последняя вспышка</th>
-              <th>Пораженные виды</th>
-              <th>Эконом. ущерб</th>
-            </tr>
-          </thead>
+          <thead><tr><th onClick={() => handleSort('country')}>Страна {sortField === 'country' && (sortDirection === 'asc' ? '↑' : '↓')}</th><th>Статус</th><th>Риск</th><th onClick={() => handleSort('cases')}>Случаи {sortField === 'cases' && (sortDirection === 'asc' ? '↑' : '↓')}</th><th onClick={() => handleSort('mortality')}>Летальность {sortField === 'mortality' && (sortDirection === 'asc' ? '↑' : '↓')}</th><th>Генотип</th><th>Последняя вспышка</th><th>Пораженные виды</th><th>Эконом. ущерб</th></tr></thead>
           <tbody>
             {filteredData.map((item, index) => (
               <tr key={index} className={item.status === 'unfavorable' ? 'row-unfavorable' : 'row-favorable'}>
                 <td className="country-cell">{item.country}</td>
-                <td>
-                  <span className={`status-badge ${item.status}`}>
-                    {item.status === 'unfavorable' ? 'Неблагополучная' : 'Благополучная'}
-                  </span>
-                </td>
-                <td>
-                  {item.risk && (
-                    <span className={getRiskBadgeClass(item.risk)}>
-                      {getRiskText(item.risk)}
-                    </span>
-                  )}
-                </td>
+                <td><span className={`status-badge ${item.status}`}>{item.status === 'unfavorable' ? 'Неблагополучная' : 'Благополучная'}</span></td>
+                <td>{item.risk && <span className={getRiskBadgeClass(item.risk)}>{getRiskText(item.risk)}</span>}</td>
                 <td>{item.cases || 0}</td>
                 <td>{item.mortality || '0%'}</td>
                 <td>{item.genotype || '-'}</td>
                 <td>{item.lastOutbreak || '-'}</td>
-                <td>
-                  {item.animals?.map(a => 
-                    a === 'poultry' ? 'Птица' : 
-                    a === 'cattle' ? 'КРС' : 
-                    a === 'pigs' ? 'Свиньи' : 
-                    a === 'sheep' ? 'МРС' : 'Лошади'
-                  ).join(', ') || '-'}
-                </td>
+                <td>{item.animals?.map(a => a === 'poultry' ? 'Птица' : a === 'cattle' ? 'КРС' : a === 'pigs' ? 'Свиньи' : a === 'sheep' ? 'МРС' : 'Лошади').join(', ') || '-'}</td>
                 <td>{item.economicDamage || '-'}</td>
               </tr>
             ))}

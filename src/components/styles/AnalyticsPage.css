@@ -673,3 +673,294 @@
   color: white;
   border-color: #007aff;
 }
+
+/* Скроллбар для всей страницы аналитики */
+.analytics-page {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0;
+  margin: 0;
+  position: relative;
+}
+
+/* Кастомный скроллбар для страницы аналитики */
+.analytics-page::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.analytics-page::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.analytics-page::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 4px;
+}
+
+.analytics-page::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* Скроллбар для таблицы */
+.analytics-table-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.analytics-table-container::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+
+.analytics-table-container::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 3px;
+}
+
+.analytics-table-container::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* Скроллбар для графиков (если нужно) */
+.chart-card .chart-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.chart-card .chart-wrapper::-webkit-scrollbar {
+  height: 4px;
+}
+
+.chart-card .chart-wrapper::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 2px;
+}
+
+.chart-card .chart-wrapper::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 2px;
+}
+
+/* Анимация загрузки для графиков */
+.chart-placeholder {
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 8px;
+  color: #888888;
+  font-size: 14px;
+  animation: pulse 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes pulse {
+  0% {
+    background-position: 200% 0;
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: -200% 0;
+    opacity: 0.8;
+  }
+}
+
+.analytics-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-to-map-btn {
+  width: 32px;
+  height: 32px;
+  background: #ffffff;
+  border: 1px solid #d0d0d0;
+  color: #666666;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-to-map-btn:hover {
+  background: #f0f0f0;
+  border-color: #007aff;
+  color: #007aff;
+  transform: translateX(-3px);
+}
+
+/* Анимация для появления страницы */
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Анимация для графиков */
+.chart-card {
+  animation: chartRise 0.5s ease-out;
+  transform-origin: center;
+}
+
+@keyframes chartRise {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Анимация для статистических карточек */
+.analytics-stats .stat-card {
+  animation: statSlide 0.4s ease-out forwards;
+  animation-delay: calc(var(--stat-index, 0) * 0.05s);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.analytics-stats .stat-card:nth-child(1) { --stat-index: 1; }
+.analytics-stats .stat-card:nth-child(2) { --stat-index: 2; }
+.analytics-stats .stat-card:nth-child(3) { --stat-index: 3; }
+.analytics-stats .stat-card:nth-child(4) { --stat-index: 4; }
+.analytics-stats .stat-card:nth-child(5) { --stat-index: 5; }
+.analytics-stats .stat-card:nth-child(6) { --stat-index: 6; }
+
+@keyframes statSlide {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  transition: transform 0.2s ease;
+}
+
+/* Анимация для строк таблицы */
+.analytics-table tbody tr {
+  animation: tableRowFade 0.3s ease-out forwards;
+  animation-delay: calc(var(--row-index, 0) * 0.02s);
+  opacity: 0;
+}
+
+@keyframes tableRowFade {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Анимация для кнопок экспорта */
+.export-btn {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.export-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.export-btn:hover::before {
+  left: 100%;
+}
+
+.export-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.export-btn:active {
+  transform: translateY(0);
+}
+
+/* Анимация для переключения типа графика */
+.chart-type-switch button {
+  transition: all 0.2s ease;
+}
+
+.chart-type-switch button:hover {
+  transform: translateY(-1px);
+}
+
+.chart-type-switch button.active {
+  animation: buttonGlow 0.3s ease-out;
+}
+
+@keyframes buttonGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 122, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 4px rgba(0, 122, 255, 0);
+  }
+}
+
+/* Анимация для фильтров */
+.filter-group select, .filter-group input {
+  transition: all 0.2s ease;
+}
+
+.filter-group select:focus, .filter-group input:focus {
+  transform: scale(1.02);
+  border-color: #007aff;
+  outline: none;
+}
+
+/* responsive */
+@media (max-width: 1024px) {
+  .charts-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .analytics-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .analytics-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .analytics-filters {
+    flex-direction: column;
+  }
+  
+  .export-buttons {
+    flex-wrap: wrap;
+  }
+  
+  .chart-wrapper {
+    height: 220px;
+  }
+}
