@@ -34,7 +34,7 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
   };
 
   const diseaseOptions = [
-    { value: 'bird_flu', label: 'Грипп птиц (H5N1)' },
+    { value: 'bird_flu', label: 'Грипп птиц' },
     { value: 'newcastle', label: 'Болезнь Ньюкасла' },
     { value: 'rrss', label: 'РРСС' },
     { value: 'rotavirus', label: 'Ротавирус КРС' },

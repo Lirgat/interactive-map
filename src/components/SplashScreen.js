@@ -12,12 +12,18 @@ const SplashScreen = () => {
     >
       <div className="splash-content">
         <motion.div 
-          className="logo-container"
-          initial={{ scale: 0.8, opacity: 0 }}
+          className="logos-container"
+          initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <img src="/images/mva.svg" alt="МГАВМиБ" className="splash-logo" />
+          <div className="logo-row top-row">
+            <img src="/images/mva.svg" alt="МГАВМиБ" className="splash-logo mva-logo" />
+            <img src="/images/msh_kolos.png" alt="Минсельхоз" className="splash-logo msh-logo" />
+          </div>
+          <div className="logo-row bottom-row">
+            <img src="/images/priotity.svg" alt="Приоритет 2030" className="splash-logo priority-logo" />
+          </div>
         </motion.div>
         
         <motion.h1
