@@ -11,7 +11,7 @@
 }
 
 .realmap-header {
-  padding: 12px 16px;
+  padding: 12px 18px;
   background: #fafbfc;
   border-bottom: 1px solid #e8e8e8;
   display: flex;
@@ -32,8 +32,7 @@
   align-items: center;
   gap: 8px;
   font-size: 11px;
-  color: #555555;
-  font-weight: 400;
+  color: #555;
 }
 
 .legend-color {
@@ -42,9 +41,28 @@
   border-radius: 3px;
 }
 
-.legend-color.favorable { background: #34c759; }
-.legend-color.unfavorable { background: #ff3b30; }
+.legend-color.favorable { background: #27ae60; }
+.legend-color.unfavorable { background: #e74c3c; }
 .legend-color.no-data { background: #e0e0e0; }
+
+/* Стили для маркеров в легенде */
+.legend-marker {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px #ccc;
+}
+
+.legend-marker.high {
+  background: #ff4444;
+  box-shadow: 0 0 0 1px #ff4444;
+}
+
+.legend-marker.medium {
+  background: #ffa500;
+  box-shadow: 0 0 0 1px #ffa500;
+}
 
 .map-controls {
   display: flex;
@@ -56,25 +74,23 @@
   height: 30px;
   border: 1px solid #d0d0d0;
   background: #ffffff;
-  color: #666666;
-  border-radius: 6px;
+  color: #555;
+  border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: bold;
   transition: all 0.2s ease;
 }
 
 .map-control-btn:hover {
-  background: #007aff;
+  background: #f0f0f0;
   border-color: #007aff;
-  color: #ffffff;
+  color: #007aff;
 }
 
 .realmap-container {
   flex: 1;
   position: relative;
   min-height: 500px;
-  background: #ffffff;
 }
 
 .map-tooltip {
@@ -86,10 +102,9 @@
   font-size: 11px;
   pointer-events: none;
   z-index: 1000;
-  min-width: 240px;
-  max-width: 300px;
+  min-width: 220px;
+  max-width: 280px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 1px solid #34495e;
 }
 
 .tooltip-header {
@@ -217,210 +232,81 @@
   }
 }
 
-/* Анимация для появления карты */
-.realmap-wrapper {
-  animation: fadeInScale 0.5s ease-out;
+/* Маркер низкого риска */
+.legend-marker.low {
+  background: #ffd700;
+  box-shadow: 0 0 0 1px #ffd700;
 }
 
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Анимация для легенды */
-.legend-item {
-  animation: fadeInLeft 0.3s ease-out forwards;
-  animation-delay: calc(var(--legend-order, 0) * 0.1s);
-  opacity: 0;
-}
-
-.legend-item:nth-child(1) { --legend-order: 1; }
-.legend-item:nth-child(2) { --legend-order: 2; }
-.legend-item:nth-child(3) { --legend-order: 3; }
-
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Анимация для кнопок управления */
-.map-control-btn {
+/* Кнопка филогенетического дерева */
+.phylogeny-btn {
+  padding: 6px 14px;
+  background: #ffffff;
+  border: 1px solid #007aff;
+  color: #007aff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
   transition: all 0.2s ease;
+  margin-left: 10px;
 }
 
-.map-control-btn:hover {
-  transform: scale(1.1);
+.phylogeny-btn:hover {
+  background: #007aff;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Кнопка филогенетического дерева */
+.phylogeny-btn {
+  padding: 6px 14px;
+  background: #ffffff;
+  border: 1px solid #007aff;
+  color: #007aff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-left: 10px;
+}
+
+.phylogeny-btn:hover {
+  background: #007aff;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Стили для ссылки на отчёт */
+.details-link {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.birdflu-link {
+  display: inline-block;
+  padding: 8px 12px;
+  background: #f0f7ff;
+  color: #007aff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.birdflu-link:hover {
   background: #007aff;
   color: white;
-  border-color: #007aff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
 }
 
-.map-control-btn:active {
-  transform: scale(0.95);
-}
-
-/* Анимация для тултипа */
-.map-tooltip {
-  animation: tooltipPop 0.2s ease-out;
-}
-
-@keyframes tooltipPop {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-/* Анимация для деталей страны */
-.country-details {
-  animation: slideUp 0.3s ease-out;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Анимация пульсации для неблагополучных стран на карте */
-@keyframes countryPulse {
-  0% {
-    filter: brightness(1);
-  }
-  50% {
-    filter: brightness(1.05);
-  }
-  100% {
-    filter: brightness(1);
-  }
-}
-
-/* Добавим класс для пульсирующих стран (можно добавить через JS для активных очагов) */
-.country-pulse {
-  animation: countryPulse 2s ease-in-out infinite;
-}
-
-/* Анимация для появления карты */
-.realmap-wrapper {
-  animation: fadeInScale 0.5s ease-out;
-}
-
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Анимация для легенды */
-.legend-item {
-  animation: fadeInLeft 0.3s ease-out forwards;
-  animation-delay: calc(var(--legend-order, 0) * 0.1s);
-  opacity: 0;
-}
-
-.legend-item:nth-child(1) { --legend-order: 1; }
-.legend-item:nth-child(2) { --legend-order: 2; }
-.legend-item:nth-child(3) { --legend-order: 3; }
-
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Анимация для кнопок управления */
-.map-control-btn {
-  transition: all 0.2s ease;
-}
-
-.map-control-btn:hover {
-  transform: scale(1.1);
-  background: #007aff;
-  color: white;
-  border-color: #007aff;
-}
-
-.map-control-btn:active {
-  transform: scale(0.95);
-}
-
-/* Анимация для тултипа */
-.map-tooltip {
-  animation: tooltipPop 0.2s ease-out;
-}
-
-@keyframes tooltipPop {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-/* Анимация для деталей страны */
-.country-details {
-  animation: slideUp 0.3s ease-out;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Анимация пульсации для неблагополучных стран на карте */
-@keyframes countryPulse {
-  0% {
-    filter: brightness(1);
-  }
-  50% {
-    filter: brightness(1.05);
-  }
-  100% {
-    filter: brightness(1);
-  }
-}
-
-/* Добавим класс для пульсирующих стран (можно добавить через JS для активных очагов) */
-.country-pulse {
-  animation: countryPulse 2s ease-in-out infinite;
+.birdflu-link:active {
+  transform: translateY(0);
 }

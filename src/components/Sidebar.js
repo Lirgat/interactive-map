@@ -6,6 +6,11 @@ import './styles/Sidebar.css';
 const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelectedAnimal, selectedYear, setSelectedYear, isOpen, onClose, onMenuChange }) => {
   
   const diseaseAnimalMapping = {
+    'all': {
+      name: 'Все заболевания',
+      animals: ['cattle', 'sheep', 'pigs', 'poultry', 'horses'],
+      animalLabels: ['КРС', 'МРС', 'Свиньи', 'Птица', 'Лошади']
+    },
     'bird_flu': {
       name: 'Грипп птиц',
       animals: ['poultry', 'pigs', 'cattle'],
@@ -34,6 +39,7 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
   };
 
   const diseaseOptions = [
+    { value: 'all', label: 'Все заболевания' },
     { value: 'bird_flu', label: 'Грипп птиц' },
     { value: 'newcastle', label: 'Болезнь Ньюкасла' },
     { value: 'rrss', label: 'РРСС' },
@@ -68,7 +74,7 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
   ];
 
   const getAvailableAnimals = () => {
-    if (!selectedDisease) {
+    if (!selectedDisease || selectedDisease === 'all') {
       return allAnimalOptions;
     }
     const allowedAnimals = diseaseAnimalMapping[selectedDisease]?.animals || [];
@@ -85,13 +91,17 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
   }, []);
 
   useEffect(() => {
-    if (selectedDisease) {
+    if (selectedDisease && selectedDisease !== 'all') {
       const availableAnimals = getAvailableAnimals();
       if (selectedAnimal && !availableAnimals.some(a => a.value === selectedAnimal)) {
         setSelectedAnimal('');
       }
       if (!selectedAnimal && availableAnimals.length > 0) {
         setSelectedAnimal(availableAnimals[0].value);
+      }
+    } else if (selectedDisease === 'all') {
+      if (selectedAnimal && !allAnimalOptions.some(a => a.value === selectedAnimal)) {
+        setSelectedAnimal('');
       }
     }
   }, [selectedDisease]);
@@ -110,12 +120,18 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
     menu: (provided) => ({
       ...provided,
       zIndex: 9999,
-      position: 'absolute'
+      position: 'absolute',
+      backgroundColor: '#ffffff',
+      borderRadius: '6px',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+      border: '1px solid #e0e0e0',
+      marginTop: '4px'
     }),
     menuList: (provided) => ({
       ...provided,
       maxHeight: '200px',
-      overflowY: 'auto'
+      overflowY: 'auto',
+      padding: '4px 0'
     }),
     option: (provided, state) => ({
       ...provided,
@@ -196,14 +212,19 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
               styles={customStyles}
               placeholder="Выберите заболевание"
               value={currentDiseaseOption}
-              onChange={(option) => setSelectedDisease(option?.value || '')}
+              onChange={(option) => setSelectedDisease(option?.value || 'all')}
               menuPortalTarget={document.body}
               menuPosition="fixed"
             />
-            {selectedDiseaseInfo && (
+            {selectedDiseaseInfo && selectedDisease !== 'all' && (
               <div className="info-note">
                 <span className="info-label">Восприимчивые виды:</span>
                 <span>{selectedDiseaseInfo.animalLabels.join(', ')}</span>
+              </div>
+            )}
+            {selectedDisease === 'all' && (
+              <div className="info-note">
+                <span className="info-label">Отображаются все данные без фильтрации по заболеваниям</span>
               </div>
             )}
           </div>
@@ -213,19 +234,14 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
             <Select
               options={availableAnimals}
               styles={customStyles}
-              placeholder={selectedDisease ? "Выберите вид животного" : "Сначала выберите заболевание"}
+              placeholder="Выберите вид животного"
               value={currentAnimalOption}
               onChange={(option) => setSelectedAnimal(option?.value || '')}
-              isDisabled={!selectedDisease || availableAnimals.length === 0}
-              noOptionsMessage={() => "Нет восприимчивых видов"}
+              isDisabled={availableAnimals.length === 0}
+              noOptionsMessage={() => "Нет доступных видов"}
               menuPortalTarget={document.body}
               menuPosition="fixed"
             />
-            {!selectedDisease && (
-              <div className="info-note warning">
-                <span>Необходимо выбрать заболевание</span>
-              </div>
-            )}
           </div>
 
           <div className="sidebar-section">
@@ -256,12 +272,12 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
             </div>
           </div>
 
-          {(selectedDisease || selectedAnimal || selectedYear) && (
+          {(selectedDisease !== 'all' || selectedAnimal || (selectedYear && selectedYear !== '2026')) && (
             <div className="active-filters">
               <div className="active-filters-title">Активные фильтры</div>
-              {selectedDisease && (
+              {selectedDisease && selectedDisease !== 'all' && (
                 <div className="active-filter">
-                  <button className="filter-remove" onClick={() => setSelectedDisease(defaultDiseaseOption.value)}>×</button>
+                  <button className="filter-remove" onClick={() => setSelectedDisease('all')}>×</button>
                   <span>Заболевание: {diseaseOptions.find(d => d.value === selectedDisease)?.label}</span>
                 </div>
               )}
@@ -271,9 +287,9 @@ const Sidebar = ({ selectedDisease, setSelectedDisease, selectedAnimal, setSelec
                   <span>Вид: {allAnimalOptions.find(a => a.value === selectedAnimal)?.label}</span>
                 </div>
               )}
-              {selectedYear && (
+              {selectedYear && selectedYear !== '2026' && (
                 <div className="active-filter">
-                  <button className="filter-remove" onClick={() => setSelectedYear(defaultYearOption.value)}>×</button>
+                  <button className="filter-remove" onClick={() => setSelectedYear('2026')}>×</button>
                   <span>Период: {selectedYear} год</span>
                 </div>
               )}
