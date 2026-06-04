@@ -15,23 +15,23 @@ const Header = ({ onToggleSidebar, isSidebarOpen, currentPage, onNavigateToMap }
             ← Назад к карте
           </button>
         )}
-        <div className="academy-logo">
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-            <rect x="2" y="2" width="36" height="36" rx="6" fill="#007aff" opacity="0.1"/>
-            <rect x="2" y="2" width="36" height="36" rx="6" stroke="#007aff" strokeWidth="1.5"/>
-            <text x="20" y="26" textAnchor="middle" fill="#007aff" fontSize="13" fontWeight="bold" fontFamily="Arial">МВА</text>
-          </svg>
-        </div>
-        <div className="academy-info">
-          <h1>ФГБОУ ВО МГАВМиБ - МВА имени К.И. Скрябина</h1>
-          <p>Единая платформа прогнозирования и управления эпизоотическими рисками</p>
+        <div className="logo-wrapper">
+          <a href="https://mgavm.ru/" target="_blank" rel="noopener noreferrer">
+            <img src="/images/mva.svg" alt="МГАВМиБ" className="academy-logo-img" />
+          </a>
+          <div className="academy-info">
+            <h1>ФГБОУ ВО МГАВМиБ - МВА имени К.И. Скрябина</h1>
+            <p>Единая платформа прогнозирования и управления эпизоотическими рисками</p>
+          </div>
         </div>
       </div>
       <div className="header-right">
-        <div className="partner">ГК ВИК</div>
-        <div className="partner">НИИ гриппа</div>
-        <div className="partner">ФМБА России</div>
-        <div className="partner">Россельхознадзор</div>
+        <a href="https://mcx.gov.ru/" target="_blank" rel="noopener noreferrer">
+          <img src="/images/msh_kolos.png" alt="Минсельхоз" className="partner-logo msh" />
+        </a>
+        <a href="https://priority2030.ru/" target="_blank" rel="noopener noreferrer">
+          <img src="/images/priotity.svg" alt="Приоритет" className="partner-logo" />
+        </a>
       </div>
     </header>
   );

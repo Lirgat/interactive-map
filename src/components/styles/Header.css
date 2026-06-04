@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 24px;
+  padding: 8px 24px;
   background: #ffffff;
   border-bottom: 1px solid #e0e0e0;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
@@ -12,6 +12,19 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  flex: 1;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-wrapper a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
 
 .sidebar-toggle {
@@ -49,9 +62,15 @@
   color: #ffffff;
 }
 
-.academy-logo {
-  display: flex;
-  align-items: center;
+.academy-logo-img {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.academy-logo-img:hover {
+  transform: scale(1.02);
 }
 
 .academy-info h1 {
@@ -69,164 +88,62 @@
 
 .header-right {
   display: flex;
-  gap: 24px;
+  align-items: center;
+  gap: 20px;
 }
 
-.partner {
-  font-size: 0.75rem;
-  color: #666666;
-  font-weight: 400;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
+.header-right a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
 
-.partner:hover {
-  color: #007aff;
-  background: #f0f7ff;
+.partner-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.partner-logo:hover {
+  transform: scale(1.05);
+}
+
+.msh {
+  height: 70px;
 }
 
 @media (max-width: 768px) {
   .header {
-    padding: 10px 16px;
+    padding: 8px 12px;
+  }
+  
+  .logo-wrapper {
+    gap: 10px;
+  }
+  
+  .academy-logo-img {
+    height: 40px;
   }
   
   .academy-info h1 {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
   
   .academy-info p {
     display: none;
   }
   
-  .header-right {
-    gap: 12px;
+  .partner-logo {
+    height: 28px;
   }
   
-  .partner {
-    font-size: 0.65rem;
+  .msh {
+    height: 50px;
   }
   
   .back-button {
     padding: 4px 10px;
     font-size: 11px;
   }
-}
-
-/* Анимация для заголовка */
-.academy-info h1 {
-  animation: slideInDown 0.5s ease-out;
-}
-
-@keyframes slideInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Анимация для партнёров */
-.partner {
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-.partner::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: #007aff;
-  transition: width 0.3s ease;
-}
-
-.partner:hover::after {
-  width: 100%;
-}
-
-/* Анимация для кнопки переключения сайдбара */
-.sidebar-toggle {
-  transition: all 0.2s ease;
-}
-
-.sidebar-toggle:hover {
-  transform: scale(1.05);
-}
-
-.sidebar-toggle:active {
-  transform: scale(0.95);
-}
-
-/* Анимация для логотипа */
-.academy-logo svg {
-  transition: all 0.3s ease;
-}
-
-.academy-logo:hover svg {
-  transform: rotate(5deg) scale(1.05);
-}
-
-/* Анимация для заголовка */
-.academy-info h1 {
-  animation: slideInDown 0.5s ease-out;
-}
-
-@keyframes slideInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Анимация для партнёров */
-.partner {
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-.partner::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: #007aff;
-  transition: width 0.3s ease;
-}
-
-.partner:hover::after {
-  width: 100%;
-}
-
-/* Анимация для кнопки переключения сайдбара */
-.sidebar-toggle {
-  transition: all 0.2s ease;
-}
-
-.sidebar-toggle:hover {
-  transform: scale(1.05);
-}
-
-.sidebar-toggle:active {
-  transform: scale(0.95);
-}
-
-/* Анимация для логотипа */
-.academy-logo svg {
-  transition: all 0.3s ease;
-}
-
-.academy-logo:hover svg {
-  transform: rotate(5deg) scale(1.05);
 }
